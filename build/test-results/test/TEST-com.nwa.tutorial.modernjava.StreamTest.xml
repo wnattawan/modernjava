@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nwa.tutorial.modernjava.StreamTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-02-06T21:36:58" hostname="LAPTOP-GRVKQDLN" time="0.101">
+  <properties/>
+  <testcase name="listLowCaloricDishes_solution1()" classname="com.nwa.tutorial.modernjava.StreamTest" time="0.093"/>
+  <testcase name="listLowCaloricDishes_solution2()" classname="com.nwa.tutorial.modernjava.StreamTest" time="0.003"/>
+  <testcase name="listLowCaloricDishes()" classname="com.nwa.tutorial.modernjava.StreamTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
