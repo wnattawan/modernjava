@@ -8,8 +8,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,10 +20,10 @@ public class StreamTest {
     List<Dish> menu = new ArrayList<>();
 
     private class Dish {
-        String name;
-        int calories;
-        boolean vego;
-        Type type;
+        private String name;
+        private int calories;
+        private boolean vego;
+        private Type type;
 
         public Dish(String name, boolean vego, int calories, Type type) {
             this.name = name;
@@ -103,5 +106,25 @@ public class StreamTest {
                 .map(Dish::getName)
                 .collect(toList());
         assertThat(lowCaloricDishesName).containsExactly("season fruit", "prawns", "rice");
+    }
+
+    @Test
+    public void listLowCaloricDishesGroupedByType() {
+        final var lowCaloricDishesNameByType = menu.stream()
+                .filter(dish -> dish.getCalories() < 400)
+                .sorted(comparing(Dish::getCalories))
+                .collect(groupingBy(Dish::getType));
+
+        assertThat(lowCaloricDishesNameByType).containsOnlyKeys(Type.FISH, Type.OTHER);
+        lowCaloricDishesNameByType.get(Type.FISH)
+                .stream()
+                .map(Dish::getName)
+                .collect(toList())
+                .containsAll(List.of("prawns"));
+        lowCaloricDishesNameByType.get(Type.OTHER)
+                .stream()
+                .map(Dish::getName)
+                .collect(toList())
+                .containsAll(List.of("season fruit", "rice"));
     }
 }
