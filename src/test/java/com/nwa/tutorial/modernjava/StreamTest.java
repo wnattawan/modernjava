@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
 
 public class StreamTest {
     List<Dish> menu = new ArrayList<>();
@@ -46,6 +48,16 @@ public class StreamTest {
 
         public Type getType() {
             return type;
+        }
+
+        @Override
+        public String toString() {
+            return "Dish{" +
+                    "name='" + name + '\'' +
+                    ", calories=" + calories +
+                    ", vego=" + vego +
+                    ", type=" + type +
+                    '}';
         }
     }
 
@@ -126,5 +138,44 @@ public class StreamTest {
                 .map(Dish::getName)
                 .collect(toList())
                 .containsAll(List.of("season fruit", "rice"));
+    }
+
+    @Test
+    public void testAnyMatch() {
+        if (menu.stream().anyMatch(Dish::isVego)) {
+            System.out.println("The menu is (somewhat) vegetarian friendly!!");
+        }
+    }
+
+    @Test
+    public void testAllMatch() {
+        if (menu.stream().allMatch(dish -> dish.getCalories() < 1000)) {
+            System.out.println("The menu is healthy");
+        }
+    }
+
+    @Test
+    public void testFindAny() {
+        menu.stream()
+                .filter(Dish::isVego)
+                .findAny()
+                .ifPresent(System.out::println);
+    }
+
+    @Test
+    public void testCountNumberOfDish_withMapAndReduce() {
+        menu.stream()
+                .map( dish -> 1)
+                .reduce(Integer::sum)
+                .ifPresentOrElse(
+                        count -> System.out.println("Dish count: " + count),
+                        () -> System.out.println("Dish count: 0" )
+                );
+    }
+
+    @Test
+    public void testCountNumberOfDish() {
+        final long count = menu.stream().count();
+        System.out.println("Dish count: " + count);
     }
 }
